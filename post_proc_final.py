@@ -10,10 +10,7 @@ import sys
 if __name__ == '__main__':
     
     datName=sys.argv[1]
-    d1 = datName.split('s/')[1]
-    type2 = sys.argv[3]
-    datName = datName.split('D/')[0]+'D/Ankita_VAD_results/'+type2+'/'+d1
-    saveName = datName+'_mod.txt'
+    saveName = datName+'_pp.txt'
 
     #childName='TheTalkativeTortoise.wav_vad_13.wav'
     
@@ -43,14 +40,15 @@ if __name__ == '__main__':
     data = loadtxt(datName)
     datasig=np.append(data,1-data[-1])
     #print datasig
-    #datasig = np.logical_not(datasig).astype(int) for ALED 2 pass
+    #datasig = np.logical_not(datasig).astype(int)
     sil=0
     sp=0
     framelen= float(sys.argv[2]) ## in ms
     sildurthresh=np.ceil(200/framelen)
     initialsil=0
     initialsp=0
-    spdurthresh=np.ceil(100/framelen)
+    spdurthresh=np.ceil(100/framelen)######## Left to right
+    datasig2 = np.copy(np.flipud(datasig)) ####### Right to left
     for i in range(len(datasig)-1):
         if datasig[i]==0:
             sil=sil+1
@@ -75,8 +73,7 @@ if __name__ == '__main__':
                 finalsil=i
                 initialsp=i+1
     #print datasig
-        datasig2 = np.copy(np.flipud(datasig)) ####### Right to left
-
+    #
     for i in range(len(datasig2)-1):
         if datasig2[i]==0:
             sil=sil+1
